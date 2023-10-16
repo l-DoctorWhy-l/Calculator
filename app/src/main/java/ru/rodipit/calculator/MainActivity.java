@@ -3,10 +3,8 @@ package ru.rodipit.calculator;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.InputFilter;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
@@ -28,6 +26,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(CalculatorViewModel.class);
         viewModel.init();
+
+        binding.buttonC.setOnLongClickListener(view -> {
+            viewModel.clearAll();
+            return false;
+        });
 
     }
 
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
 
     public void onClickButton(View v){
         String buttonText = ((TextView) v).getText().toString();

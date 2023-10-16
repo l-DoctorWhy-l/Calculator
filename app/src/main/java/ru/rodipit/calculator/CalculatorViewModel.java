@@ -24,19 +24,32 @@ public class CalculatorViewModel extends ViewModel {
         System.out.println("Digit");
         if(getFormulaSize() > 23)
             return;
+
         if ("-÷+×".contains(formula.get(focus))){
             focus++;
             if(formula.size() - 1 < focus)
                 formula.add("");
         }
-        if (digit.equals(".") && formula.get(focus).contains("."))
+        if(digit.equals(".") && formula.get(focus).length() == 0){
+            focus--;
             return;
+        }
+        if (digit.equals(".") && formula.get(focus).contains(".")){
+            return;
+        }
+
         if((focus == 0 && formula.get(focus).equals("0"))){
             if (digit.equals(".")){
                 formula.set(focus, formula.get(focus) + digit);
             }
             else
                 formula.set(focus, digit);
+            updateText();
+            return;
+        }
+        if(formula.get(focus).contains("E") && focus == 0){
+            clearAll();
+            formula.set(focus, digit);
             updateText();
             return;
         }
@@ -92,7 +105,7 @@ public class CalculatorViewModel extends ViewModel {
     }
     void delete(){
 
-        if (formula.get(focus).contains("E")){
+        if (formula.get(focus).contains("E") || formula.get(focus).contains("-") && focus == 0){
             clearAll();
             return;
         }
@@ -103,7 +116,7 @@ public class CalculatorViewModel extends ViewModel {
                 return;
         }
         formula.set(focus, formula.get(focus).substring(0, formula.get(focus).length() - 1));
-        if(formula.get(focus).length() == 0)
+        if(formula.get(focus).length() == 0 && focus != 0)
             focus--;
         updateText();
     }
@@ -137,7 +150,7 @@ public class CalculatorViewModel extends ViewModel {
             }
             case "×":
                 return first * second;
-        };
+        }
         return 0;
     }
 
